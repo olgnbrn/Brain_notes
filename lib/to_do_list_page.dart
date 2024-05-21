@@ -14,6 +14,7 @@ class _TodoListPageState extends State<TodoListPage> {
     'Eğitim': [],
     'Finansal': [],
     'Sağlık': [],
+    'Tamamlananlar': [],
   };
   String selectedCategory = 'Fitness';
   final TextEditingController _titleController = TextEditingController();
@@ -74,6 +75,15 @@ class _TodoListPageState extends State<TodoListPage> {
   void _toggleDone(Todo todo) {
     setState(() {
       todo.isDone = !todo.isDone;
+      if (todo.isDone) {
+        // Tamamlanan görevi mevcut kategoriden çıkar ve 'Tamamlananlar' kategorisine ekle
+        categorizedTodos[selectedCategory]?.remove(todo);
+        categorizedTodos['Tamamlananlar']?.add(todo);
+      } else {
+        // Tamamlanmamış görevi 'Tamamlananlar' kategorisinden çıkar ve mevcut kategoriye ekle
+        categorizedTodos['Tamamlananlar']?.remove(todo);
+        categorizedTodos[selectedCategory]?.add(todo);
+      }
       _saveTodos();
     });
   }
@@ -97,31 +107,32 @@ class _TodoListPageState extends State<TodoListPage> {
           Container(
             height: 60,
             color: Colors.grey[200],
-            child: ListView(
+            child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              children: categorizedTodos.keys.map((String category) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedCategory = category;
-                    });
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
+              child: Row(
+                children: categorizedTodos.keys.map((String category) {
+                  return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      category,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: selectedCategory == category
-                            ? Colors.blue
-                            : Colors.black54,
-                        fontSize: 18,
+                    child: ChoiceChip(
+                      label: Text(
+                        category,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54,
+                          fontSize: 18,
+                        ),
                       ),
+                      selected: selectedCategory == category,
+                      selectedColor: Colors.lightBlue,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          selectedCategory = category;
+                        });
+                      },
                     ),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             ),
           ),
           Expanded(
@@ -129,10 +140,20 @@ class _TodoListPageState extends State<TodoListPage> {
               itemCount: categorizedTodos[selectedCategory]?.length ?? 0,
               itemBuilder: (context, index) {
                 final todo = categorizedTodos[selectedCategory]![index];
-                return Card(
-                  margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                return Dismissible(
+                  key: Key(todo.id),
+                  background: Container(color: Colors.red),
+                  onDismissed: (direction) {
+                    _deleteTodo(todo.id);
+                  },
                   child: ListTile(
-                    title: Text(todo.title, style: TextStyle(fontSize: 18)),
+                    title: Text(
+                      todo.title,
+                      style: TextStyle(
+                        fontSize: 18,
+                        decoration: todo.isDone ? TextDecoration.lineThrough : null,
+                      ),
+                    ),
                     subtitle: Text(todo.description),
                     trailing: Checkbox(
                       value: todo.isDone,
@@ -142,9 +163,6 @@ class _TodoListPageState extends State<TodoListPage> {
                     ),
                     onTap: () {
                       // Görev detayları için bir dialog göster
-                    },
-                    onLongPress: () {
-                      _deleteTodo(todo.id);
                     },
                   ),
                 );
@@ -222,4 +240,5 @@ class Todo {
       isDone: json['isDone'],
     );
   }
+
 }

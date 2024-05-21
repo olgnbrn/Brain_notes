@@ -32,7 +32,15 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Giriş Yap'),
-        automaticallyImplyLeading: false,
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        titleTextStyle: TextStyle(
+          color: Colors.black87,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        automaticallyImplyLeading: false, // Geri tuşunu kaldır
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -41,13 +49,11 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              // Logo ekleniyor
               SizedBox(
                 height: 300,
                 child: Image.asset('assets/logo_son.png'), // Logo dosya yolu
               ),
               SizedBox(height: 16.0),
-              // E-posta text field'ı
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -57,7 +63,6 @@ class LoginPage extends StatelessWidget {
                 keyboardType: TextInputType.emailAddress,
               ),
               SizedBox(height: 16.0),
-              // Şifre text field'ı
               TextFormField(
                 controller: _passwordController,
                 decoration: InputDecoration(
@@ -67,7 +72,6 @@ class LoginPage extends StatelessWidget {
                 obscureText: true,
               ),
               SizedBox(height: 24.0),
-              // Giriş yap butonu
               ElevatedButton(
                 child: Text('Giriş Yap'),
                 onPressed: () async {
@@ -77,7 +81,6 @@ class LoginPage extends StatelessWidget {
                     context,
                   );
                   if (user != null) {
-                    // Kullanıcıyı MainScreen'e yönlendir
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => MainScreen()),
@@ -85,7 +88,6 @@ class LoginPage extends StatelessWidget {
                   }
                 },
               ),
-              // Kayıt ol butonu
               TextButton(
                 child: Text('Kayıt Ol'),
                 onPressed: () {

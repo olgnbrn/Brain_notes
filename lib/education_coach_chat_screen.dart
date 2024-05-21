@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 
-class FitnessCoachChatScreen extends StatefulWidget {
+class EducationCoachChatScreen extends StatefulWidget {
   final String category;
 
-  FitnessCoachChatScreen({required this.category});
+  EducationCoachChatScreen({required this.category});
 
   @override
-  _FitnessCoachChatScreenState createState() => _FitnessCoachChatScreenState();
+  _EducationCoachChatScreenState createState() => _EducationCoachChatScreenState();
 }
 
-class _FitnessCoachChatScreenState extends State<FitnessCoachChatScreen> {
+class _EducationCoachChatScreenState extends State<EducationCoachChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final List<MessageItem> _messages = [];
 
@@ -48,7 +48,7 @@ class _FitnessCoachChatScreenState extends State<FitnessCoachChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.category} koçluğu'),
+        title: Text('${widget.category} Koçluğu'),
       ),
       body: Column(
         children: <Widget>[
