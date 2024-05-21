@@ -1,6 +1,6 @@
-// sign_up_screen.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -15,21 +15,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
-  // E-posta doğrulama fonksiyonu
   bool _isValidEmail(String email) {
     return RegExp(r'\S+@\S+\.\S+').hasMatch(email);
   }
 
-  // Şifre doğrulama fonksiyonu
   bool _isValidPassword(String password) {
     return password.length >= 6;
   }
 
+  Future<void> _saveUserProfile(UserCredential userCredential) async {
+    await FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({
+      'firstName': _nameController.text,
+      'lastName': _surnameController.text,
+      // Diğer profil bilgileri buraya eklenebilir
+    });
+  }
+
   void _registerUser(BuildContext context) async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Form doğrulaması başarılı
       if (!_isValidEmail(_emailController.text)) {
-        // E-posta geçersiz, hata göster
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Geçerli bir e-posta adresi girin.'),
@@ -39,7 +43,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return;
       }
       if (!_isValidPassword(_passwordController.text)) {
-        // Şifre geçersiz, hata göster
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Şifre en az 6 karakter olmalıdır.'),
@@ -53,18 +56,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
           email: _emailController.text,
           password: _passwordController.text,
         );
-        // Kullanıcı başarıyla kaydedildi, başarılı pop-up göster
+        await _saveUserProfile(userCredential);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Kayıt başarılı!'),
             backgroundColor: Colors.green,
           ),
         );
-        // Giriş sayfasına yönlendirme
         Navigator.of(context).pushReplacementNamed('/login');
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
-          // Şifre güçsüz pop-up göster
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Şifre çok zayıf.'),
@@ -72,7 +73,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           );
         } else if (e.code == 'email-already-in-use') {
-          // E-posta zaten kullanımda pop-up göster
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('E-posta adresi zaten kullanımda.'),
@@ -80,7 +80,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           );
         } else {
-          // Diğer hatalar için genel hata pop-up göster
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(e.message ?? 'Kayıt başarısız, lütfen tekrar deneyin.'),
@@ -90,7 +89,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       }
     } else {
-      // Form doğrulaması başarısız, hata göster
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Lütfen tüm alanları doğru doldurun.'),

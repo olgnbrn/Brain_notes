@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'firebase_options.dart';
 import 'home_page.dart';
-import 'reminder_page.dart';
+import 'to_do_list_page.dart';
 import 'profile_page.dart';
 import 'login_page.dart';
 import 'fitness_coach_chat_screen.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => MainScreen(),
         '/profile': (context) => ProfilePage(),
-        '/reminder': (context) => ReminderPage(),
+        '/reminder': (context) => TodoListPage(),
         '/login': (context) => LoginPage(),
         // '/fitness_coach_chat' rotası kaldırıldı
       },
@@ -62,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _widgetOptions = [
     HomePage(),
-    ReminderPage(),
+    TodoListPage(),
     ProfilePage(),
   ];
 
@@ -85,8 +85,8 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Ana Sayfa',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Hatırlatıcı',
+            icon: Icon(Icons.list),
+            label: 'Yapılacaklar',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
