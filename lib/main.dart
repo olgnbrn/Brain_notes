@@ -15,7 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Gemini.init(apiKey: 'AIzaSyAAOKE0RVFqb7YMzVXbgymIUonRHKesgOY');
+  Gemini.init(apiKey: 'AIzaSyCnA6fcq1bMtGBtgaiw0r4Yb3O6M3D1H_8');
   runApp(MyApp());
 }
 

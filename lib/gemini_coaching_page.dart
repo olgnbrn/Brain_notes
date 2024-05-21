@@ -19,7 +19,7 @@ class _GeminiCoachingPageState extends State<GeminiCoachingPage> {
   void initState() {
     super.initState();
     // ApiClient sınıfınızın bir örneğini oluşturun ve API anahtarınızı buraya ekleyin
-    _apiClient = ApiClient(baseUrl: 'API_BASE_URL', apiKey: 'AIzaSyAAOKE0RVFqb7YMzVXbgymIUonRHKesgOY');
+    _apiClient = ApiClient(baseUrl: 'API_BASE_URL', apiKey: 'AIzaSyCnA6fcq1bMtGBtgaiw0r4Yb3O6M3D1H_8');
   }
 
   void _sendMessage() async {

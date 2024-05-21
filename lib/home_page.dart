@@ -71,7 +71,7 @@ class _GeminiCoachingPageState extends State<GeminiCoachingPage> {
   @override
   void initState() {
     super.initState();
-    _geminiClient = GeminiClient(apiKey: 'AIzaSyAAOKE0RVFqb7YMzVXbgymIUonRHKesgOY');
+    _geminiClient = GeminiClient(apiKey: 'AIzaSyCnA6fcq1bMtGBtgaiw0r4Yb3O6M3D1H_8');
   }
 
   void _sendMessage() async {
