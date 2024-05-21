@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'services/api_client.dart'; // ApiClient sınıfınızın olduğu dosyayı import edin
+
 
 class GeminiCoachingPage extends StatefulWidget {
   final String category;
+
 
   GeminiCoachingPage({required this.category});
 
@@ -12,6 +15,7 @@ class GeminiCoachingPage extends StatefulWidget {
 
 class _GeminiCoachingPageState extends State<GeminiCoachingPage> {
   final TextEditingController _controller = TextEditingController();
+  String? _apiKey = dotenv.env['API_KEY_GEMINI'];
   String _response = '';
   late ApiClient _apiClient;
 
@@ -19,7 +23,7 @@ class _GeminiCoachingPageState extends State<GeminiCoachingPage> {
   void initState() {
     super.initState();
     // ApiClient sınıfınızın bir örneğini oluşturun ve API anahtarınızı buraya ekleyin
-    _apiClient = ApiClient(baseUrl: '', apiKey: 'AIzaSyCnA6fcq1bMtGBtgaiw0r4Yb3O6M3D1H_8');
+    _apiClient = ApiClient(baseUrl: '', apiKey: _apiKey!);
   }
 
   void _sendMessage() async {
