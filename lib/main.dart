@@ -1,9 +1,23 @@
+import 'package:brain_notes/services/api_client.dart';
+import 'package:brain_notes/sign_up_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'home_page.dart'; // HomePage için oluşturduğunuz dosya
-import 'reminder_page.dart'; // ReminderPage için oluşturduğunuz dosya
-import 'profile_page.dart'; // ProfilePage için oluşturduğunuz dosya
+import 'package:flutter_gemini/flutter_gemini.dart';
+import 'firebase_options.dart';
+import 'home_page.dart';
+import 'reminder_page.dart';
+import 'profile_page.dart';
+import 'login_page.dart';
+import 'fitness_coach_chat_screen.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  Gemini.init(apiKey: 'AIzaSyAAOKE0RVFqb7YMzVXbgymIUonRHKesgOY');
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -18,7 +32,21 @@ class MyApp extends StatelessWidget {
         '/': (context) => MainScreen(),
         '/profile': (context) => ProfilePage(),
         '/reminder': (context) => ReminderPage(),
-        // Diğer sayfalarınızın rotalarını buraya ekleyin.
+        '/login': (context) => LoginPage(),
+        // '/fitness_coach_chat' rotası kaldırıldı
+      },
+      onGenerateRoute: (settings) {
+        // FitnessCoachChatScreen için dinamik rota oluşturma
+        if (settings.name == '/fitness_coach_chat') {
+          final args = settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) {
+              return FitnessCoachChatScreen(category: args['category']);
+            },
+          );
+        }
+        // Diğer rotalar burada tanımlanabilir
+        return null;
       },
     );
   }

@@ -1,3 +1,4 @@
+// sign_up_screen.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,9 +15,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
+  // E-posta doğrulama fonksiyonu
+  bool _isValidEmail(String email) {
+    return RegExp(r'\S+@\S+\.\S+').hasMatch(email);
+  }
+
+  // Şifre doğrulama fonksiyonu
+  bool _isValidPassword(String password) {
+    return password.length >= 6;
+  }
+
   void _registerUser(BuildContext context) async {
     if (_formKey.currentState?.validate() ?? false) {
       // Form doğrulaması başarılı
+      if (!_isValidEmail(_emailController.text)) {
+        // E-posta geçersiz, hata göster
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Geçerli bir e-posta adresi girin.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+      if (!_isValidPassword(_passwordController.text)) {
+        // Şifre geçersiz, hata göster
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Şifre en az 6 karakter olmalıdır.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
       try {
         UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text,
@@ -59,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       }
     } else {
-      // Form doğrulaması başarısız, hata pop-up göster
+      // Form doğrulaması başarısız, hata göster
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Lütfen tüm alanları doğru doldurun.'),
@@ -122,6 +153,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     if (value?.isEmpty ?? true) {
                       return 'E-posta alanı boş bırakılamaz';
                     }
+                    if (!_isValidEmail(value!)) {
+                      return 'Geçerli bir e-posta adresi girin.';
+                    }
                     return null;
                   },
                 ),
@@ -136,6 +170,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   validator: (value) {
                     if (value?.isEmpty ?? true) {
                       return 'Şifre alanı boş bırakılamaz';
+                    }
+                    if (!_isValidPassword(value!)) {
+                      return 'Şifre en az 6 karakter olmalıdır.';
                     }
                     return null;
                   },
