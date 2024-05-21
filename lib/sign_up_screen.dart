@@ -27,7 +27,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     await FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({
       'firstName': _nameController.text,
       'lastName': _surnameController.text,
-      // Diğer profil bilgileri buraya eklenebilir
     });
   }
 
@@ -57,13 +56,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
           password: _passwordController.text,
         );
         await _saveUserProfile(userCredential);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Kayıt başarılı!'),
-            backgroundColor: Colors.green,
-          ),
+        // Kayıt başarılı pop-up
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Kayıt Başarılı'),
+              content: Text('Hesabınız başarıyla oluşturuldu.'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Giriş Yap'),
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed('/login');
+                  },
+                ),
+              ],
+            );
+          },
         );
-        Navigator.of(context).pushReplacementNamed('/login');
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           ScaffoldMessenger.of(context).showSnackBar(

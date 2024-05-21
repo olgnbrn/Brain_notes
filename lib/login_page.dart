@@ -32,6 +32,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Giriş Yap'),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -43,9 +44,9 @@ class LoginPage extends StatelessWidget {
               // Logo ekleniyor
               SizedBox(
                 height: 300,
-                child: Image.asset('assets/logo.jpg'), // Logo dosya yolu
+                child: Image.asset('assets/logo_son.png'), // Logo dosya yolu
               ),
-              SizedBox(height: 48.0),
+              SizedBox(height: 16.0),
               // E-posta text field'ı
               TextFormField(
                 controller: _emailController,
